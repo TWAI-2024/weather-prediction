@@ -5,7 +5,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.tree import DecisionTreeClassifier
 
-from src.rainpred.preprocessor_factory import PreprocessorFactory
+from rainpred.preprocessor_factory import PreprocessorFactory
 
 class ModelFactory:
     
