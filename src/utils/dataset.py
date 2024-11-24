@@ -12,7 +12,7 @@ class Dataset:
         """
         :return: the full data frame for this dataset (including the class column)
         """
-        data = pd.read_csv(self.file_path).dropna()
+        data = pd.read_csv(self.file_path)
         if self.num_samples is not None:
             df = df.sample(self.num_samples, random_state=self.random_seed)
         return data
