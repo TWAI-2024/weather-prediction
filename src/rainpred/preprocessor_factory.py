@@ -17,7 +17,7 @@ class PreprocessorFactory:
         )
     
     @classmethod
-    def create_ordinal_encoder_standard_scaler(cls):
+    def create_standard_scaler(cls):
         return ColumnTransformer(
             [
                 ("scaler", StandardScaler(),  cls.COLS_USED_BY_ORIGINAL_MODELS)
