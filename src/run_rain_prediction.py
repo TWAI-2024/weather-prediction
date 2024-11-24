@@ -1,44 +1,40 @@
-from typing import Tuple, Optional
-
 import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.preprocessing import LabelEncoder, StandardScaler
-from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 import seaborn as sns
 from sklearn.metrics import classification_report
 
 from rainpred.model_factory import ModelFactory
+from utils.data_base import DataInfo
 from utils.dataset import Dataset
-from rainpred.data import COL_RAINTOMORROW, COL_DATE
+from utils.load_kaggle_data import load_via_kaggle
+from rainpred.data import COL_RAINTOMORROW, RainDataTransformer
 
 np.random.seed(0)
 
 def main():
+    load_via_kaggle('jsphyg/weather-dataset-rattle-package')
 
     dataset = Dataset(file_path="./data/weatherAUS.csv", target_col=COL_RAINTOMORROW)
 
     X,y = dataset.load_xy()
 
+    DataInfo.info(X)
+
+    DataInfo.analyze_unique_values(X)
+
+    # Data Cleaning
+
+    X = RainDataTransformer.clean_data(X)
+
     # TODO: Include feature engineering
-    ### Feature Engineering 
+    # Feature Engineering 
 
-    X = X.drop([COL_DATE], axis=1) # dropping extra columns
-
-    # target = data['RainTomorrow']
-
-    # #Set up a standard scaler for the features
-    # col_names = list(features.columns)
-    # s_scaler = preprocessing.StandardScaler()
-    # features = s_scaler.fit_transform(features)
-    # features = pd.DataFrame(features, columns=col_names) 
 
     # Splitting test and training sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
-    #y_test = [1 if x == "Yes" else 0 for x in y_test]
-    #print(y_test)
 
     batch_size = 32
     epochs = 150
@@ -78,7 +74,6 @@ def main():
     loss_values = clf["model"].loss_curve_
     #print("val_acc:", val_acc)
     #print("loss_values:", loss_values)
-
 
 
 if __name__ == '__main__':
