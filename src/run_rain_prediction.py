@@ -19,19 +19,20 @@ def main():
 
     dataset = Dataset(file_path="./data/weatherAUS.csv", target_col=COL_RAINTOMORROW)
 
-    X,y = dataset.load_xy()
+    data = dataset.load_data_frame()
 
-    DataInfo.info(X)
+    DataInfo.info(data)
 
-    DataInfo.analyze_unique_values(X)
+    DataInfo.analyze_unique_values(data)
 
     # Data Cleaning
 
-    X = RainDataTransformer.clean_data(X)
+    data = RainDataTransformer.clean_data(data)
 
+    X, y = data.drop(columns=COL_RAINTOMORROW), data[COL_RAINTOMORROW]
+    
     # TODO: Include feature engineering
     # Feature Engineering 
-
 
     # Splitting test and training sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
@@ -74,7 +75,6 @@ def main():
     loss_values = clf["model"].loss_curve_
     #print("val_acc:", val_acc)
     #print("loss_values:", loss_values)
-
 
 if __name__ == '__main__':
     main()
