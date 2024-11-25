@@ -40,7 +40,7 @@ class RainDataTransformer(DataTransformer):
 
     @classmethod
     def clean_data(cls, data):
-        data = super().clean_data(data)
+        # data = super().clean_data(data)
         data = data.drop([COL_DATE], axis=1) # dropping extra columns
         
         # Fill NaNs for categorical columns
