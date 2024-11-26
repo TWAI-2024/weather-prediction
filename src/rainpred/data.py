@@ -1,4 +1,6 @@
-from utils.data_base import DataInfo, DataTransformer
+from enum import Enum
+
+from utils.data_base import DataCleaner
 
 COL_DATE = "Date"
 COL_LOC = "Location"
@@ -24,7 +26,7 @@ COL_TEMP3PM = "Temp3pm"
 COL_RAINTODAY = "RainToday"
 COL_RAINTOMORROW = "RainTomorrow"
 
-class RainDataTransformer(DataTransformer):
+class RainDataCleaner(DataCleaner):
 
     @staticmethod
     def __get_categ_cols(data):

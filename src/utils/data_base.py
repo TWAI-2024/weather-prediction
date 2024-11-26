@@ -47,10 +47,10 @@ class DataInfo:
                 else:
                     print(f'\n{i} -- {unique_category}\n')
 
-class DataTransformer:
+class DataCleaner:
 
     @classmethod
     def clean_data(cls, data):
         # Basic cleaning applicable to all data types
-        cleaned_data = data.strip().lower()
+        cleaned_data = data.dropna()
         return cleaned_data
