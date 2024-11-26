@@ -52,5 +52,6 @@ class DataCleaner:
     @classmethod
     def clean_data(cls, data):
         # Basic cleaning applicable to all data types
-        cleaned_data = data.dropna()
-        return cleaned_data
+        lowercase = lambda x: str(x).lower()
+        data.rename(lowercase, axis='columns', inplace=True)
+        return data
