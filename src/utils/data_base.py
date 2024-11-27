@@ -47,10 +47,11 @@ class DataInfo:
                 else:
                     print(f'\n{i} -- {unique_category}\n')
 
-class DataTransformer:
+class DataCleaner:
 
     @classmethod
     def clean_data(cls, data):
         # Basic cleaning applicable to all data types
-        cleaned_data = data.strip().lower()
-        return cleaned_data
+        lowercase = lambda x: str(x).lower()
+        data.rename(lowercase, axis='columns', inplace=True)
+        return data
