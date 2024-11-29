@@ -12,20 +12,37 @@ from base.dataset import Dataset
 from utils.load_kaggle_data import load_via_kaggle
 from rainpred.data import COL_RAINTOMORROW, RainDataCleaner
 
+from argparse import ArgumentParser
+
 np.random.seed(0)
 
-def main():
-    load_via_kaggle('jsphyg/weather-dataset-rattle-package')
+DATA_PATH = "./data/weatherAUS.csv"
 
-    dataset = Dataset(file_path="./data/weatherAUS.csv", target_col=COL_RAINTOMORROW)
+def create_parser():
+    parser = ArgumentParser(prog="rainpred")
+    parser.add_argument("--download_data", "-l", action='store_true')
+    parser.add_argument("--analyze", "-a", action='store_true')
+    parser.add_argument("--visualize", "-v", action='store_true')
+    parser.add_argument("--result_path", "-v", type=str, default='result/')
+    return parser
+
+def main():
+    parser = create_parser()
+    args = parser.parse_args()
+
+    if args.download_data:
+        print("Downloading data...")
+        load_via_kaggle('jsphyg/weather-dataset-rattle-package')
+
+    dataset = Dataset(file_path=DATA_PATH, target_col=COL_RAINTOMORROW)
 
     data = dataset.load_data_frame()
 
-    DataInfo.info(data)
-    DataInfo.analyze_unique_values(data)
+    if args.analyze:
+        DataInfo.info(data)
+        DataInfo.analyze_unique_values(data)
 
     # Data Cleaning
-
     data = RainDataCleaner.clean_data(data)
 
     X, y = data.drop(columns=COL_RAINTOMORROW), data[COL_RAINTOMORROW]
