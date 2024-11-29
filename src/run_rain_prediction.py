@@ -21,10 +21,10 @@ DATA_PATH = "./data/weatherAUS.csv"
 
 def create_parser():
     parser = ArgumentParser(prog="rainpred")
-    parser.add_argument("--download_data", "-l", action='store_true')
+    parser.add_argument("--download_data", "-s", action='store_true')
     parser.add_argument("--analyze", "-a", action='store_true')
     parser.add_argument("--visualize", "-v", action='store_true')
-    parser.add_argument("--result_path", "-v", type=str, default='result/')
+    parser.add_argument("--result_path", "-r", type=str, default='results/')
     return parser
 
 def main():
@@ -35,7 +35,7 @@ def main():
         print("Downloading data...")
         load_via_kaggle('jsphyg/weather-dataset-rattle-package')
 
-    plot_path = "results/plots/"
+    plot_path = args.result_path + "plots/"
 
     dataset = Dataset(file_path=DATA_PATH, target_col=COL_RAINTOMORROW)
 
@@ -74,8 +74,10 @@ def main():
         y_pred = clf.predict(X_test)
 
         print(classification_report(y_test, y_pred))
-        vis = Visualiser(clf = clf, name = name, path=plot_path, y_test=y_test, y_pred=y_pred)
-        vis.visualise_metrics()
+
+        if args.visualize:
+            vis = Visualiser(clf = clf, name = name, path=plot_path, y_test=y_test, y_pred=y_pred)
+            vis.visualise_metrics()
         
 
 
