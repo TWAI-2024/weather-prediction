@@ -7,8 +7,8 @@ import seaborn as sns
 from sklearn.metrics import classification_report
 
 from rainpred.model_factory import ModelFactory
-from utils.data_base import DataInfo
-from utils.dataset import Dataset
+from base.data_base import DataInfo
+from base.dataset import Dataset
 from utils.load_kaggle_data import load_via_kaggle
 from rainpred.data import COL_RAINTOMORROW, RainDataCleaner
 

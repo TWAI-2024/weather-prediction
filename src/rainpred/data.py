@@ -1,6 +1,6 @@
 from enum import Enum
 
-from utils.data_base import DataCleaner
+from base.data_base import DataCleaner
 
 COL_DATE = "Date"
 COL_LOC = "Location"
