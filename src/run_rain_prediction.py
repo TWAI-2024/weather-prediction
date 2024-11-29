@@ -10,6 +10,7 @@ from rainpred.model_factory import ModelFactory
 from base.data_base import DataInfo
 from base.dataset import Dataset
 from utils.load_kaggle_data import load_via_kaggle
+from utils.visualisations import Visualiser
 from rainpred.data import COL_RAINTOMORROW, RainDataCleaner
 
 from argparse import ArgumentParser
@@ -34,6 +35,8 @@ def main():
         print("Downloading data...")
         load_via_kaggle('jsphyg/weather-dataset-rattle-package')
 
+    plot_path = "results/plots/"
+
     dataset = Dataset(file_path=DATA_PATH, target_col=COL_RAINTOMORROW)
 
     data = dataset.load_data_frame()
@@ -46,9 +49,6 @@ def main():
     data = RainDataCleaner.clean_data(data)
 
     X, y = data.drop(columns=COL_RAINTOMORROW), data[COL_RAINTOMORROW]
-
-    # TODO: Include feature engineering
-    # Feature Engineering 
 
     # Splitting test and training sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
@@ -72,8 +72,12 @@ def main():
         print(f"Score of {name}:", score)
         # Predicting the test set results
         y_pred = clf.predict(X_test)
-        # y_pred = (y_pred > 0.5)
+
         print(classification_report(y_test, y_pred))
+        vis = Visualiser(clf = clf, name = name, path=plot_path, y_test=y_test, y_pred=y_pred)
+        vis.visualise_metrics()
+        
+
 
 if __name__ == '__main__':
     main()
