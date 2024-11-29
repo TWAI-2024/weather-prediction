@@ -7,27 +7,45 @@ import seaborn as sns
 from sklearn.metrics import classification_report
 
 from rainpred.model_factory import ModelFactory
-from utils.data_base import DataInfo
-from utils.dataset import Dataset
-#from utils.load_kaggle_data import load_via_kaggle
-from rainpred.data import COL_RAINTOMORROW, RainDataCleaner
+from base.data_base import DataInfo
+from base.dataset import Dataset
+from utils.load_kaggle_data import load_via_kaggle
 from utils.visualisations import Visualiser
+from rainpred.data import COL_RAINTOMORROW, RainDataCleaner
+
+from argparse import ArgumentParser
 
 np.random.seed(0)
 
+DATA_PATH = "./data/weatherAUS.csv"
+
+def create_parser():
+    parser = ArgumentParser(prog="rainpred")
+    parser.add_argument("--download_data", "-l", action='store_true')
+    parser.add_argument("--analyze", "-a", action='store_true')
+    parser.add_argument("--visualize", "-v", action='store_true')
+    parser.add_argument("--result_path", "-v", type=str, default='result/')
+    return parser
+
 def main():
-    #load_via_kaggle('jsphyg/weather-dataset-rattle-package')
+    parser = create_parser()
+    args = parser.parse_args()
+
+    if args.download_data:
+        print("Downloading data...")
+        load_via_kaggle('jsphyg/weather-dataset-rattle-package')
+
     plot_path = "results/plots/"
-    dataset = Dataset(file_path="./data/weatherAUS.csv", target_col=COL_RAINTOMORROW)
+
+    dataset = Dataset(file_path=DATA_PATH, target_col=COL_RAINTOMORROW)
 
     data = dataset.load_data_frame()
 
-    # Print general data information
-    #DataInfo.info(data)
-    #DataInfo.analyze_unique_values(data)
+    if args.analyze:
+        DataInfo.info(data)
+        DataInfo.analyze_unique_values(data)
 
     # Data Cleaning
-
     data = RainDataCleaner.clean_data(data)
 
     X, y = data.drop(columns=COL_RAINTOMORROW), data[COL_RAINTOMORROW]
