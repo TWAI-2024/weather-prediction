@@ -11,7 +11,7 @@ from utils.data_base import DataInfo
 from utils.dataset import Dataset
 #from utils.load_kaggle_data import load_via_kaggle
 from rainpred.data import COL_RAINTOMORROW, RainDataCleaner
-from utils import visualisations
+from utils.visualisations import Visualiser
 
 np.random.seed(0)
 
@@ -56,7 +56,8 @@ def main():
         y_pred = clf.predict(X_test)
 
         print(classification_report(y_test, y_pred))
-        visualisations.visualise_metrics(clf, name, plot_path, y_pred, y_test)
+        vis = Visualiser(clf = clf, name = name, path=plot_path, y_test=y_test, y_pred=y_pred)
+        vis.visualise_metrics()
         
 
 
